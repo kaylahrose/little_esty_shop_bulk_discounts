@@ -83,11 +83,3 @@ task :import, [:invoice_items] => :environment do
   ActiveRecord::Base.connection.reset_pk_sequence!('invoice_items')
   puts "InvoiceItems imported."
 end
-task :import, [:all] => :environment do
-  Rake::Task["import:merchants"].invoke
-  Rake::Task["import:items"].invoke
-  Rake::Task["import:customers"].invoke
-  Rake::Task["import:invoices"].invoke
-  Rake::Task["import:invoice_items"].invoke
-  Rake::Task["import:transactions"].invoke
-end
