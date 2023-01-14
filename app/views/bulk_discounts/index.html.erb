@@ -1,0 +1,22 @@
+<div class="nav-container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <p class="navbar-text"><%= @merchant.name %></p>
+    <ul class="nav navbar-nav">
+      <li><%= link_to 'Dashboard', merchant_dashboard_index_path, style: 'pull-right' %>
+      <%= link_to 'My Items', merchant_items_path(@merchant), style: 'pull-right' %>
+      <%= link_to 'My Invoices', merchant_invoices_path(@merchant), style: 'pull-right' %></li>
+    </ul>
+  </nav>
+</div>
+
+<body>
+  <div class="row">
+    <p class='col-12'>My Items</p>
+  </div>
+
+  <% @merchant.bulk_discounts.each do |bd| %>
+    <section id="discount-<%=bd.id%>">
+      <p><%= link_to "Discount", merchant_bulk_discount_path(@merchant, bd) %> <%=bd.percentage%>% off <%=bd.quantity%> items or more</p>
+    </section>
+  <% end %>
+</body>
