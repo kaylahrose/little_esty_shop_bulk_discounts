@@ -23,11 +23,11 @@ RSpec.describe "bulk discounts index page" do
     visit merchant_bulk_discounts_path(@merchant1)
     
     @merchant1.bulk_discounts.each do |bd|
-      within("#bulk_discount-#{bd.id}") do
-      expect(current_page).to have_content(bd.percentage)
-      expect(current_page).to have_content(bd.quantity)
+      within("#discount-#{bd.id}") do
+      expect(page).to have_content(bd.percentage)
+      expect(page).to have_content(bd.quantity)
       click_link("Discount")
-      expect(current_path).to eq(bulk_discount_path(bd))
+      expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, bd))
       visit merchant_bulk_discounts_path(@merchant1)
       end
     end
