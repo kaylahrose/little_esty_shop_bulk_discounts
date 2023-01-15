@@ -4,16 +4,6 @@ RSpec.describe "bulk discounts index page" do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
   end
-  #     1: Merchant Bulk Discounts Index
-
-# As a merchant
-# When I visit my merchant dashboard
-# Then I see a link to view all my discounts
-# When I click this link
-# Then I am taken to my bulk discounts index page
-# Where I see all of my bulk discounts including their
-# percentage discount and quantity thresholds
-# And each bulk discount listed includes a link to its show page
 
   it "lists all merchant's bulk discounts" do
     bd1 = @merchant1.bulk_discounts.create!(percentage: 10, quantity: 10)
@@ -24,14 +14,29 @@ RSpec.describe "bulk discounts index page" do
     
     @merchant1.bulk_discounts.each do |bd|
       within("#discount-#{bd.id}") do
-      expect(page).to have_content(bd.percentage)
-      expect(page).to have_content(bd.quantity)
-      click_link("Discount")
-      expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, bd))
-      visit merchant_bulk_discounts_path(@merchant1)
+        expect(page).to have_content(bd.percentage)
+        expect(page).to have_content(bd.quantity)
+        click_link("Discount")
+        expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, bd))
+        visit merchant_bulk_discounts_path(@merchant1)
       end
     end
   end
 
   it "does not list other merchant's bulk discounts"
+
+  it "has a link to create a new item" do
+    click_link "Create New Discount"
+    expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
+    fill_in "Percentage", with: 50
+    fill_in "Quanity", with: 50
+    click_button "Submit"
+
+    expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
+    bd = BulkDiscount.last
+
+    within("#discount-#{bd.id}") do
+      expect(page).to have_content(bd.percentage)
+    end
+  end
 end
