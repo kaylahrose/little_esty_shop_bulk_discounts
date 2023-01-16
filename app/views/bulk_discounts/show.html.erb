@@ -12,5 +12,6 @@
 <body>
   <div class="row">
     <p class='col-12'>Discount: <%= @discount.percentage %>% off <%=@discount.quantity_threshold%> items or more</p>
+    <p> <%= link_to "Edit", [:edit, @merchant, @discount] %></p>
   </div>
 </body>
