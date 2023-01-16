@@ -14,9 +14,11 @@
     <p class='col-12'>My Items</p>
   </div>
 
+  <p><%= link_to "Create New Discount", new_merchant_bulk_discount_path(@merchant) %></p>
+
   <% @merchant.bulk_discounts.each do |bd| %>
     <section id="discount-<%=bd.id%>">
-      <p><%= link_to "Discount", merchant_bulk_discount_path(@merchant, bd) %> <%=bd.percentage%>% off <%=bd.quantity%> items or more</p>
+      <p><%= link_to "Discount", merchant_bulk_discount_path(@merchant, bd) %> <%=bd.percentage%>% off <%=bd.quantity_threshold%> items or more</p>
     </section>
   <% end %>
 </body>
