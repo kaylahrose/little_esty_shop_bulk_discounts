@@ -38,5 +38,20 @@ RSpec.describe InvoiceItem, type: :model do
     it 'incomplete_invoices' do
       expect(InvoiceItem.incomplete_invoices).to eq([@i1, @i3])
     end
+
+    
+    it 'finds best discount' do
+      @m1 = Merchant.create!(name: 'Merchant 1') 
+      @item_1 = Item.create!(name: 'Shampoo', description: 'This washes your hair', unit_price: 10, merchant_id: @m1.id)
+      @i1 = Invoice.create!(customer_id: @c1.id, status: 2)
+      @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 7, unit_price: 10, status: 0)
+      @bd = @m1.bulk_discounts.create!(percentage: 10, quantity_threshold: 5)
+      @bd2 = @m1.bulk_discounts.create!(percentage: 10, quantity_threshold: 20)
+
+      expect(@ii_1.best_discount).to eq(@bd)
+      @bd3 = @m1.bulk_discounts.create!(percentage: 120, quantity_threshold: 5)
+
+      expect(@ii_1.best_discount).to eq(@bd3)
+    end
   end
 end
