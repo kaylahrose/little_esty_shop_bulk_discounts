@@ -23,8 +23,10 @@ class InvoiceItem < ApplicationRecord
   end
 
   def revenue
+    quantity * unit_price
   end
 
   def revenue_with_discount
+    revenue - (revenue * (best_discount.percentage/100.0))
   end
 end
