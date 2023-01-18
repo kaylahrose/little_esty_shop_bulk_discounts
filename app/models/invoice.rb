@@ -11,7 +11,7 @@ class Invoice < ApplicationRecord
 
   enum status: [:cancelled, 'in progress', :completed]
 
-  def total_revenue
+   def total_revenue # lambda and proc || ruby how to sum a model method
     invoice_items.sum(&:revenue)
   end
 
@@ -20,6 +20,6 @@ class Invoice < ApplicationRecord
   end
 
   def discounted_revenue_for_merchant(merchant)
-    sum_of_revenue_from_invoice_items
+    merchant.invoice_items.where(invoice: self).sum(&:revenue_with_discount)
   end
 end

@@ -9,7 +9,6 @@ class InvoiceItem < ApplicationRecord
   belongs_to :item
   has_one :merchant, through: :item
   has_many :bulk_discounts, through: :merchant
-  # scope :bulk_discount, -> { joins(:bulk_discounts).where("quantity >= bulk_discounts.quantity_threshold").order("bulk_discounts.percentage DESC") }
 
   enum status: [:pending, :packaged, :shipped]
 
@@ -19,14 +18,14 @@ class InvoiceItem < ApplicationRecord
   end
 
   def best_discount
-    bulk_discounts.where("quantity_threshold <= ?", quantity).order(percentage: :desc).first
+    bulk_discounts.where("quantity_threshold <= ?", quantity).order(percentage: :desc).first&.percentage || 0
   end
-
+  
   def revenue
     quantity * unit_price
   end
-
-  def revenue_with_discount
-    revenue - (revenue * (best_discount.percentage/100.0))
+  
+  def revenue_with_discount # safety operator
+    revenue - (revenue * ((self.best_discount ||= 0)/100.0))
   end
 end

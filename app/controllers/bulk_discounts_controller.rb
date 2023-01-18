@@ -1,8 +1,17 @@
 class BulkDiscountsController < ApplicationController
   def index
     @merchant = Merchant.find(params[:merchant_id])
+    @upcoming_holidays = blarg
   end
   
+  def note 
+      # make fetch request
+      # parse fetch request
+      # limit to next 3 top 3
+      # only release name and date
+      # helper self method
+  end
+
   def show
     @merchant = Merchant.find(params[:merchant_id])
     @discount = BulkDiscount.find(params[:id])
