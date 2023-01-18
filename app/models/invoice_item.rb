@@ -18,7 +18,7 @@ class InvoiceItem < ApplicationRecord
   end
 
   def best_discount
-    bulk_discounts.where("quantity_threshold <= ?", quantity).order(percentage: :desc).first&.percentage || 0
+    bulk_discounts.where("quantity_threshold <= ?", quantity).order(percentage: :desc).first
   end
   
   def revenue
@@ -26,6 +26,7 @@ class InvoiceItem < ApplicationRecord
   end
   
   def revenue_with_discount # safety operator
-    revenue - (revenue * ((self.best_discount ||= 0)/100.0))
+    # require 'pry'; binding.pry
+    revenue - (revenue * ((self.best_discount&.percentage || 0)/100.0))
   end
 end

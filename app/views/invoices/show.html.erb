@@ -37,6 +37,7 @@
         <th class="th1">Quantity</th>
         <th class="th1">Unit Price</th>
         <th class="th1">Status</th>
+        <th class="th1">Discount</th>
       </tr>
     </thead>
 
@@ -50,11 +51,17 @@
             <td style="text-align:center"><%= form_with model: @invoice, url: merchant_invoice_path(@merchant, @invoice), method: :patch, local: true do |f| %>
                                             <%= f.select :status, Invoice.statuses.keys, selected: "#{@invoice.status}" %>
                                             <%= f.submit 'Update Invoice' %>
-                                          <% end %></td><br/>
+                                          <% end %></td>
+                                          <% if i.best_discount %>
+            <td style="text-align:center"><%= link_to "#{i.best_discount.percentage}%", merchant_bulk_discount_path(@merchant, i.best_discount)%></td>
+                                          <% end %>
+                                          <br/>
           </tr>
         </section>
       <% end %>
     </tbody>
   </table>
+
+  
 
 </body>
