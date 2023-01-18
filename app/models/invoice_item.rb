@@ -26,7 +26,6 @@ class InvoiceItem < ApplicationRecord
   end
   
   def revenue_with_discount # safety operator
-    # require 'pry'; binding.pry
     revenue - (revenue * ((self.best_discount&.percentage || 0)/100.0))
   end
 end

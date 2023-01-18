@@ -22,4 +22,8 @@ class Invoice < ApplicationRecord
   def discounted_revenue_for_merchant(merchant)
     merchant.invoice_items.where(invoice: self).sum(&:revenue_with_discount)
   end
+
+  def discounted_revenue
+    invoice_items.sum(&:revenue_with_discount)
+  end
 end
