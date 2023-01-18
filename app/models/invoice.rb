@@ -11,7 +11,7 @@ class Invoice < ApplicationRecord
 
   enum status: [:cancelled, 'in progress', :completed]
 
-   def total_revenue # lambda and proc || ruby how to sum a model method
+   def total_revenue 
     invoice_items.sum(&:revenue)
   end
 

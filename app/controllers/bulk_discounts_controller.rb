@@ -1,17 +1,15 @@
 class BulkDiscountsController < ApplicationController
   def index
     @merchant = Merchant.find(params[:merchant_id])
-    # @upcoming_holidays = blarg
-  end
-  
-  def note 
-      # make fetch request
-      # parse fetch request
-      # limit to next 3 top 3
-      # only release name and date
-      # helper self method
+    @holidays = get_holidays
+
   end
 
+  def get_data
+    response = HTTParty.get(@url)
+    JSON.parse(response.body, symbolize_names: true)
+  end
+  
   def show
     @merchant = Merchant.find(params[:merchant_id])
     @discount = BulkDiscount.find(params[:id])
@@ -49,4 +47,15 @@ class BulkDiscountsController < ApplicationController
     def discount_params
       params.require(:bulk_discount).permit(:percentage, :quantity_threshold)
     end
+
+      def get_holidays
+    url = "https://date.nager.at/api/v3/NextPublicHolidays/US"
+    response = HTTParty.get(url)
+    data = JSON.parse(response.body, symbolize_names: true)
+    holiday_data = data.take(3)
+    holidays = {}
+    holiday_data.each do |holiday|
+      holidays[holiday[:name].to_sym] = holiday[:date]
+    end
+  end
 end

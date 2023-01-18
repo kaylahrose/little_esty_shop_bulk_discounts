@@ -10,6 +10,11 @@
 </div>
 
 <body>
+  <section><h4>Upcoming Holidays</h4>
+    <% @holidays.each do |holiday| %>
+      <p> <%=holiday[:name]%> <%=holiday[:date]%>
+    <% end %>
+  </section>
   <div class="row">
     <p class='col-12'>My Items</p>
   </div>
