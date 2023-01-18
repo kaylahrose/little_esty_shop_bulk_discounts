@@ -69,4 +69,37 @@ describe 'Admin Invoices Index Page' do
       expect(@i1.status).to eq('completed')
     end
   end
+
+#   8: Admin Invoice Show Page: Total Revenue and Discounted Revenue
+
+# As an admin
+# When I visit an admin invoice show page
+# Then I see the total revenue from this invoice (not including discounts)
+# And I see the total discounted revenue from this invoice which includes bulk discounts in the calculation
+
+  it 'shows total revenue for invoice' do
+    expect(page).to have_content(@i1.total_revenue)
+  end
+  
+  it 'shows total discounted revenue for invoice' do
+    @m1 = Merchant.create!(name: 'Merchant 1')
+
+    @c1 = Customer.create!(first_name: 'Yo', last_name: 'Yoz', address: '123 Heyyo', city: 'Whoville', state: 'CO', zip: 12345)
+    @c2 = Customer.create!(first_name: 'Hey', last_name: 'Heyz')
+
+    @i1 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: '2012-03-25 09:54:09')
+    @i2 = Invoice.create!(customer_id: @c2.id, status: 1, created_at: '2012-03-25 09:30:09')
+
+    @item_1 = Item.create!(name: 'test', description: 'lalala', unit_price: 6, merchant_id: @m1.id)
+    @item_2 = Item.create!(name: 'rest', description: 'dont test me', unit_price: 12, merchant_id: @m1.id)
+
+    @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 12, unit_price: 2, status: 0)
+    @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 6, unit_price: 1, status: 1)
+    @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
+    bd = @m1.bulk_discounts.create!(percentage: 10, quantity_threshold: 10)
+    visit admin_invoice_path(@i1)
+
+
+    expect(page).to have_content(@i1.discounted_revenue)
+  end
 end
