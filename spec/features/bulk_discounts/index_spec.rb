@@ -23,8 +23,6 @@ RSpec.describe "bulk discounts index page" do
     end
   end
 
-  it "does not list other merchant's bulk discounts"
-
   it "has a link to create a new discount" do
     visit merchant_bulk_discounts_path(@merchant1)
 
